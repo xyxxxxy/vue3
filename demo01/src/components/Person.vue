@@ -1,40 +1,47 @@
 <template>
-  <div class="person">
-    <h2>姓名:{{ Name }}</h2>
-    <h2>年龄:{{ Age }}</h2>
-    <button @click="changeName">修改姓名</button>
-    <button @click="changeAge">修改年龄</button>
-    <button @click="showTel">显示联系方式</button>
+  <div class="Person">
+    姓：<input type="text" v-model="firstName" /><br />
+    名：<input type="text" v-model="lastName" /><br />
+    全名：<span>{{ fullName }}</span
+    ><br />
+    <button @click="changeName">将全名改为li-si</button>
   </div>
 </template>
-<script lang="ts">
-export default {
-  name: 'MyPerson'
-}
-</script>
-
 <script lang="ts" setup>
-let Name = '张三'
-let Age = 18
-let Tel = '135645645654'
+import { computed, ref } from 'vue'
+
+let firstName = ref('张')
+let lastName = ref('三')
+
+// // only read
+// let fullName = computed(() => {
+//   return firstName.value.slice(0, 1).toUpperCase() + firstName.value.slice(1) + '-' + lastName.value
+// })
+
+// read and write
+let fullName = computed({
+  get() {
+    return (
+      firstName.value.slice(0, 1).toUpperCase() + firstName.value.slice(1) + '-' + lastName.value
+    )
+  },
+  set(val) {
+    const [str1, str2] = val.split('-')
+    firstName.value = str1
+    lastName.value = str2
+  }
+})
 
 function changeName() {
-  Name = 'zhang-san'
-}
-
-function changeAge() {
-  Age += 1
-}
-function showTel() {
-  alert(Tel)
+  fullName.value = 'li-si'
 }
 </script>
 
 <style scoped>
-.person {
-  background-color: #bbb;
+.Person {
+  background-color: #99c9db;
   box-shadow: 0 0 10px;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 20px;
 }
 </style>
